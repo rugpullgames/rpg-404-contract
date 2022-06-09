@@ -5,7 +5,7 @@ pragma solidity >=0.7.0 <0.9.0;
 import "openzeppelin-solidity/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
 
-contract NFT is ERC721Enumerable, Ownable {
+contract RPG404 is ERC721Enumerable, Ownable {
     using Strings for uint256;
 
     string baseURI;
