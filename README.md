@@ -6,5 +6,6 @@
 
 1. Install [Visual Studio](https://visualstudio.microsoft.com/vs/)
 2. Install **Desktop development with C++** in **Visual Studio**
-3. `npm i -g truffle`
+3. `npm i -g truffle` to install [**Truffle**](https://trufflesuite.com/)
 4. `truffle init` to initialize truffle scallfolder. This project has already been initialized.
+5. `npm i -g ganache-cli` to install [**Ganache CLI**](https://trufflesuite.com/ganache/)
