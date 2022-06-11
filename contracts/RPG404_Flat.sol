@@ -1522,7 +1522,7 @@ contract RPG404 is ERC721Enumerable, Ownable {
         );
         mintedAmount[msg.sender] = _mintedAmount + _quantity;
         for (uint256 i = 1; i <= _quantity; i++) {
-            _safeMint(msg.sender, _totalSupply + 1);
+            _safeMint(msg.sender, _totalSupply + i);
         }
     }
 
@@ -1540,7 +1540,7 @@ contract RPG404 is ERC721Enumerable, Ownable {
         freeMintedAmount[msg.sender] = _freeMintedAmount + _quantity;
 
         for (uint256 i = 1; i <= _quantity; i++) {
-            _safeMint(msg.sender, _totalSupply + 1);
+            _safeMint(msg.sender, _totalSupply + i);
         }
     }
 
