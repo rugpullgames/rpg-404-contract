@@ -10,21 +10,26 @@ contract RPG404 is ERC721Enumerable, Ownable {
 
     string baseURI;
     string public baseExtension = ".json";
-    uint256 public cost = 0.05 ether;
-    uint256 public maxSupply = 10000;
-    uint256 public maxMintAmount = 20;
-    bool public paused = false;
-    bool public revealed = false;
-    string public notRevealedUri;
 
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        string memory _initBaseURI,
-        string memory _initNotRevealedUri
-    ) ERC721(_name, _symbol) {
-        setBaseURI(_initBaseURI);
-        setNotRevealedURI(_initNotRevealedUri);
+    uint256 public maxSupply = 100;
+    uint256 public maxFreeSupply = 50;
+
+    uint256 public maxPerTxDuringMint = 5;
+    uint256 public maxPerAddressDuringMint = 20;
+    uint256 public maxPerAddressDuringFreeMint = 2;
+
+    uint256 public cost = 0.05 ether;
+    bool public saleIsActive = false;
+
+    mapping(address => uint256) public freeMintedAmount;
+    mapping(address => uint256) public mintedAmount;
+
+    constructor() ERC721("RPG 404", "RPG404") {}
+
+    modifier mintCompliance() {
+        require(saleIsActive, "Sale is not active yet.");
+        require(tx.origin == msg.sender, "Caller cannot be a contract.");
+        _;
     }
 
     // internal
@@ -33,20 +38,34 @@ contract RPG404 is ERC721Enumerable, Ownable {
     }
 
     // public
-    function mint(uint256 _mintAmount) public payable {
-        uint256 supply = totalSupply();
-        require(!paused);
-        require(_mintAmount > 0);
-        require(_mintAmount <= maxMintAmount);
-        require(supply + _mintAmount <= maxSupply);
+    function mint(uint256 _quantity) external payable mintCompliance {
+        require(msg.value >= cost * _quantity, "Insufficient Fund.");
+        require(maxSupply >= totalSupply() + _quantity, "Exceeds max supply.");
+        uint256 _mintedAmount = mintedAmount[msg.sender];
+        require(
+            _mintedAmount + _quantity <= maxPerAddressDuringMint,
+            "Exceeds max mints per address!"
+        );
+        require(
+            _quantity > 0 && _quantity <= maxPerTxDuringMint,
+            "Invalid mint amount."
+        );
+        mintedAmount[msg.sender] = _mintedAmount + _quantity;
+        _safeMint(msg.sender, _quantity);
+    }
 
-        if (msg.sender != owner()) {
-            require(msg.value >= cost * _mintAmount);
-        }
-
-        for (uint256 i = 1; i <= _mintAmount; i++) {
-            _safeMint(msg.sender, supply + i);
-        }
+    function freeMint(uint256 _quantity) external mintCompliance {
+        require(
+            maxFreeSupply >= totalSupply() + _quantity,
+            "Exceeds max free supply."
+        );
+        uint256 _freeMintedAmount = freeMintedAmount[msg.sender];
+        require(
+            _freeMintedAmount + _quantity <= maxPerAddressDuringFreeMint,
+            "Exceeds max free mints per address!"
+        );
+        freeMintedAmount[msg.sender] = _freeMintedAmount + _quantity;
+        _safeMint(msg.sender, _quantity);
     }
 
     function walletOfOwner(address _owner)
@@ -74,10 +93,6 @@ contract RPG404 is ERC721Enumerable, Ownable {
             "ERC721Metadata: URI query for nonexistent token"
         );
 
-        if (revealed == false) {
-            return notRevealedUri;
-        }
-
         string memory currentBaseURI = _baseURI();
         return
             bytes(currentBaseURI).length > 0
@@ -91,21 +106,12 @@ contract RPG404 is ERC721Enumerable, Ownable {
                 : "";
     }
 
-    //only owner
-    function reveal() public onlyOwner {
-        revealed = true;
-    }
-
     function setCost(uint256 _newCost) public onlyOwner {
         cost = _newCost;
     }
 
-    function setmaxMintAmount(uint256 _newmaxMintAmount) public onlyOwner {
-        maxMintAmount = _newmaxMintAmount;
-    }
-
-    function setNotRevealedURI(string memory _notRevealedURI) public onlyOwner {
-        notRevealedUri = _notRevealedURI;
+    function setmaxMintAmount(uint256 _newMaxPerTxDuringMint) public onlyOwner {
+        maxPerTxDuringMint = _newMaxPerTxDuringMint;
     }
 
     function setBaseURI(string memory _newBaseURI) public onlyOwner {
@@ -119,12 +125,14 @@ contract RPG404 is ERC721Enumerable, Ownable {
         baseExtension = _newBaseExtension;
     }
 
-    function pause(bool _state) public onlyOwner {
-        paused = _state;
+    function flipSale() public onlyOwner {
+        saleIsActive = !saleIsActive;
     }
 
     function withdraw() public payable onlyOwner {
-        (bool os, ) = payable(owner()).call{value: address(this).balance}("");
-        require(os);
+        (bool success, ) = payable(owner()).call{value: address(this).balance}(
+            ""
+        );
+        require(success);
     }
 }
