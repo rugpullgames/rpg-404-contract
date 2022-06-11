@@ -39,8 +39,9 @@ contract RPG404 is ERC721Enumerable, Ownable {
 
     // public
     function mint(uint256 _quantity) external payable mintCompliance {
+        uint256 _totalSupply = totalSupply();
         require(msg.value >= cost * _quantity, "Insufficient Fund.");
-        require(maxSupply >= totalSupply() + _quantity, "Exceeds max supply.");
+        require(maxSupply >= _totalSupply + _quantity, "Exceeds max supply.");
         uint256 _mintedAmount = mintedAmount[msg.sender];
         require(
             _mintedAmount + _quantity <= maxPerAddressDuringMint,
@@ -51,12 +52,15 @@ contract RPG404 is ERC721Enumerable, Ownable {
             "Invalid mint amount."
         );
         mintedAmount[msg.sender] = _mintedAmount + _quantity;
-        _safeMint(msg.sender, _quantity);
+        for (uint256 i = 1; i <= _quantity; i++) {
+            _safeMint(msg.sender, _totalSupply + 1);
+        }
     }
 
     function freeMint(uint256 _quantity) external mintCompliance {
+        uint256 _totalSupply = totalSupply();
         require(
-            maxFreeSupply >= totalSupply() + _quantity,
+            maxFreeSupply >= _totalSupply + _quantity,
             "Exceeds max free supply."
         );
         uint256 _freeMintedAmount = freeMintedAmount[msg.sender];
@@ -65,7 +69,10 @@ contract RPG404 is ERC721Enumerable, Ownable {
             "Exceeds max free mints per address!"
         );
         freeMintedAmount[msg.sender] = _freeMintedAmount + _quantity;
-        _safeMint(msg.sender, _quantity);
+
+        for (uint256 i = 1; i <= _quantity; i++) {
+            _safeMint(msg.sender, _totalSupply + 1);
+        }
     }
 
     function walletOfOwner(address _owner)
