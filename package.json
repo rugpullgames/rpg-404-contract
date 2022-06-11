@@ -10,7 +10,7 @@
   "scripts": {
     "init": "npm i -g truffle ganache-cli",
     "test": "truffle test",
-    "flat": "npx truffle-flattener ./contracts/RPG404.sol > ./contracts/FlatRPG404n.sol",
+    "flat": "npx truffle-flattener ./contracts/RPG404.sol > ./contracts/RPG404_Flat.sol",
     "migrate": "truffle migrate",
     "migrate_rinkeby": "truffle migrate --network rinkeby",
     "console": " truffle console"
