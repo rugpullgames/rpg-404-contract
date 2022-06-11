@@ -80,15 +80,15 @@ contract RPG404 is ERC721Enumerable, Ownable {
         view
         returns (uint256[] memory)
     {
-        uint256 ownerTokenCount = balanceOf(_owner);
-        uint256[] memory tokenIds = new uint256[](ownerTokenCount);
-        for (uint256 i; i < ownerTokenCount; i++) {
+        uint256 _ownerTokenCount = balanceOf(_owner);
+        uint256[] memory tokenIds = new uint256[](_ownerTokenCount);
+        for (uint256 i; i < _ownerTokenCount; i++) {
             tokenIds[i] = tokenOfOwnerByIndex(_owner, i);
         }
         return tokenIds;
     }
 
-    function tokenURI(uint256 tokenId)
+    function tokenURI(uint256 _tokenId)
         public
         view
         virtual
@@ -96,17 +96,17 @@ contract RPG404 is ERC721Enumerable, Ownable {
         returns (string memory)
     {
         require(
-            _exists(tokenId),
+            _exists(_tokenId),
             "ERC721Metadata: URI query for nonexistent token"
         );
 
-        string memory currentBaseURI = _baseURI();
+        string memory _currentBaseURI = _baseURI();
         return
-            bytes(currentBaseURI).length > 0
+            bytes(_currentBaseURI).length > 0
                 ? string(
                     abi.encodePacked(
-                        currentBaseURI,
-                        tokenId.toString(),
+                        _currentBaseURI,
+                        _tokenId.toString(),
                         baseExtension
                     )
                 )
@@ -137,9 +137,9 @@ contract RPG404 is ERC721Enumerable, Ownable {
     }
 
     function withdraw() public payable onlyOwner {
-        (bool success, ) = payable(owner()).call{value: address(this).balance}(
+        (bool _success, ) = payable(owner()).call{value: address(this).balance}(
             ""
         );
-        require(success);
+        require(_success);
     }
 }
