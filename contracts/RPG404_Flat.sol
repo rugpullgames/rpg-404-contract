@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 
+// File: node_modules\openzeppelin-solidity\contracts\utils\introspection\IERC165.sol
+
 // OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)
 
 pragma solidity ^0.8.0;
@@ -1485,7 +1487,7 @@ contract RPG404 is ERC721Enumerable, Ownable {
     uint256 public maxPerAddressDuringMint = 20;
     uint256 public maxPerAddressDuringFreeMint = 2;
 
-    uint256 public cost = 0.05 ether;
+    uint256 public cost = 0.007 ether;
     bool public saleIsActive = false;
 
     mapping(address => uint256) public freeMintedAmount;
