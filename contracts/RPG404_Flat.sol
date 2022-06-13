@@ -1534,6 +1534,10 @@ contract RPG404 is ERC721Enumerable, Ownable {
         );
         uint256 _freeMintedAmount = freeMintedAmount[msg.sender];
         require(
+            _quantity > 0 && _quantity <= maxPerAddressDuringFreeMint,
+            "Invalid mint amount."
+        );
+        require(
             _freeMintedAmount + _quantity <= maxPerAddressDuringFreeMint,
             "Exceeds max free mints per address!"
         );
