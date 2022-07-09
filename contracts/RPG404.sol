@@ -15,7 +15,7 @@ contract RPG404 is ERC721Enumerable, Ownable {
     uint256 public maxFreeSupply = 3000;
 
     uint256 public maxPerTxDuringMint = 6;
-    uint256 public maxPerAddressDuringMint = 15;
+    uint256 public maxPerAddressDuringMint = 18;
     uint256 public maxPerAddressDuringFreeMint = 3;
 
     uint256 public cost = 0.015 ether;
