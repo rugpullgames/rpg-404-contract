@@ -12,7 +12,7 @@ contract RPG404 is ERC721Enumerable, Ownable {
     string public baseExtension = ".json";
 
     uint256 public maxSupply = 19998;
-    uint256 public maxFreeSupply = 3000;
+    uint256 public maxFreeSupply = 999;
 
     uint256 public maxPerTxDuringMint = 6;
     uint256 public maxPerAddressDuringMint = 18;
