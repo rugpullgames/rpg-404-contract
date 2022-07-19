@@ -8,7 +8,7 @@
     "openzeppelin-solidity": "^4.6.0"
   },
   "scripts": {
-    "init": "npm i -g truffle ganache-cli",
+    "init": "npm i -g truffle ganache-cli truffle-flattener",
     "test": "truffle test",
     "flat": "npx truffle-flattener ./contracts/RPG404.sol > ./contracts/RPG404_Flat.sol",
     "migrate": "truffle migrate",
