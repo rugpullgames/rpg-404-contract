@@ -10,6 +10,9 @@ contract address
 baseURI
 ipfs://QmSjHc7yWLNUAoXAsHf1dkTKBmhkqAz6qgShM4scRobV5i/
 
+baseURI
+https://rpg404.com/nft/rpg404/json/
+
 
 // Published RPG404's Metadata and Sources
 Metadata and sources of "rpg404" were published successfully.
